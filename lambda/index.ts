@@ -22,6 +22,15 @@ export const handler = async (event: any) => {
           })
         };
 
+      case 'DELETE':
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            message: 'Delete successful',
+            timestamp: new Date().toISOString()
+          })
+        };
+
       default:
         return {
           statusCode: 400,

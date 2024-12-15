@@ -27,5 +27,6 @@ export class FinanceFlowBackendStack extends cdk.Stack {
     const items = api.root.addResource('api');
     items.addMethod('GET', new apigateway.LambdaIntegration(handler));
     items.addMethod('POST', new apigateway.LambdaIntegration(handler));
+    items.addMethod('DELETE', new apigateway.LambdaIntegration(handler));
   }
 }
