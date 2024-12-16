@@ -28,7 +28,7 @@ export class FinanceFlowBackendStack extends cdk.Stack {
     const handler = new lambda.Function(this, 'FinanceFlowHandler', {
       runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset('lambda'),
-      handler: 'index.handler',
+      handler: 'dist/handlers/index.handler',
       environment: {
         STAGE: 'dev',
         TRANSACTIONS_TABLE: transactionsTable.tableName
