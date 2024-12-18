@@ -15,11 +15,12 @@ export class HandlersStack extends Stack {
 
         this.createTransactionHandler = new Function(this, 'CreateTransactionHandler', {
             runtime: Runtime.NODEJS_18_X,
-            handler: 'index.createTransaction',
+            handler: 'dist/handlers/index.handler',
             code: Code.fromAsset('lambda'),
             environment: {
-                TRANSACTIONS_TABLE: props.transactionsTable.tableName,
-            },
+                STAGE: 'dev',
+                TRANSACTIONS_TABLE: props.transactionsTable.tableName
+            }
         });
 
         props.transactionsTable.grantReadWriteData(this.createTransactionHandler);
