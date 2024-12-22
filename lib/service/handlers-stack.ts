@@ -8,12 +8,12 @@ interface HandlersStackProps extends StackProps {
 }
 
 export class HandlersStack extends Stack {
-    public readonly createTransactionHandler: Function;
+    public readonly TransactionHandler: Function;
 
     constructor(scope: Construct, id: string, props: HandlersStackProps) {
         super(scope, id, props);
 
-        this.createTransactionHandler = new Function(this, 'CreateTransactionHandler', {
+        this.TransactionHandler = new Function(this, 'TransactionHandler', {
             runtime: Runtime.NODEJS_18_X,
             handler: 'dist/handlers/index.handler',
             code: Code.fromAsset('lambda'),
@@ -23,6 +23,6 @@ export class HandlersStack extends Stack {
             }
         });
 
-        props.transactionsTable.grantReadWriteData(this.createTransactionHandler);
+        props.transactionsTable.grantReadWriteData(this.TransactionHandler);
     }
 } 

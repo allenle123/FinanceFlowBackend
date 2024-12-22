@@ -45,4 +45,42 @@ export const deleteTransaction = async (userId: string, transactionId: string): 
       },
     })
     .promise();
-}; 
+};
+
+
+export const updateTransaction = async (
+  userId: string,
+  transactionId: string,
+  updateFields: Partial<Omit<Transaction, 'userId' | 'transactionId'>>
+): Promise<Transaction> => {
+  const updateExpression = Object.keys(updateFields)
+    .map((key, index) => `#field${index} = :value${index}`)
+    .join(', ');
+  const expressionAttributeNames = Object.keys(updateFields).reduce(
+    (acc, key, index) => ({
+      ...acc,
+      [`#field${index}`]: key,
+    }),
+    {}
+  );
+  const expressionAttributeValues = Object.keys(updateFields).reduce(
+    (acc, key, index) => ({
+      ...acc,
+      [`:value${index}`]: (updateFields as any)[key],
+    }),
+    {}
+  );
+
+  const params = {
+    TableName: TABLE_NAME,
+    Key: { userId, transactionId },
+    UpdateExpression: `SET ${updateExpression}`,
+    ExpressionAttributeNames: expressionAttributeNames,
+    ExpressionAttributeValues: expressionAttributeValues,
+    ReturnValues: 'ALL_NEW',
+  };
+
+  const result = await dynamodb.update(params).promise();
+
+  return result.Attributes as Transaction;
+};

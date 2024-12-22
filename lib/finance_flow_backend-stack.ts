@@ -18,7 +18,7 @@ export class FinanceFlowBackendStack extends Stack {
 		});
 
 		this.apiGatewayStack = new ApiGatewayStack(this, 'ApiGatewayStack', {
-			transactionHandler: this.handlersStack.createTransactionHandler,
+			transactionHandler: this.handlersStack.TransactionHandler,
 		});
 	}
 }
