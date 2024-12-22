@@ -37,17 +37,14 @@ cdk bootstrap aws://ACCOUNT_ID/REGION
 
 ### Local Testing
 ```bash
-# Synthesize CloudFormation template
-cdk synth
-
-# Preview changes
-cdk diff
+# Do this in the root directory
+npm run build
 ```
 
 ### Deployment
 ```bash
 # Deploy to AWS
-cdk deploy
+cdk deploy --all
 ```
 
 ## ✅ Verification
@@ -78,7 +75,6 @@ After deployment, verify your resources in the AWS Console:
 
 ## 🛠️ Useful Commands
 
-- `cdk synth` - Synthesize CloudFormation template
 - `cdk diff` - Compare deployed stack with current state
 - `cdk deploy` - Deploy this stack to AWS
 - `cdk destroy` - Remove this stack from AWS
