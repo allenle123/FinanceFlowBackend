@@ -26,7 +26,7 @@ jobs:
         run: npm ci
         
       - name: Build
-        run: npm run builds
+        run: npm run build
         
       - name: Deploy to AWS
         run: npx cdk deploy --all --require-approval never 
