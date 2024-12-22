@@ -13,14 +13,21 @@ export class ApiGatewayStack extends Stack {
     constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
         super(scope, id, props);
 
+        // Create the API Gateway
         this.api = new RestApi(this, 'FinanceFlowApi', {
             restApiName: 'Finance Flow API',
-            description: 'API for Finance Flow application'
+            description: 'API for Finance Flow application',
         });
 
-        const items = this.api.root.addResource('api');
-        items.addMethod('GET', new LambdaIntegration(props.transactionHandler));
-        items.addMethod('POST', new LambdaIntegration(props.transactionHandler));
-        items.addMethod('DELETE', new LambdaIntegration(props.transactionHandler));
+        // Create a resource for transactions
+        const transactionsResource = this.api.root.addResource('api');
+
+        // Add methods for GET, POST, DELETE using the transactionHandler
+        transactionsResource.addMethod('GET', new LambdaIntegration(props.transactionHandler));
+        transactionsResource.addMethod('POST', new LambdaIntegration(props.transactionHandler));
+        transactionsResource.addMethod('DELETE', new LambdaIntegration(props.transactionHandler));
+
+        // Add a PUT method for updates using the updateTransactionHandler
+        transactionsResource.addMethod('PUT', new LambdaIntegration(props.transactionHandler));
     }
 }
