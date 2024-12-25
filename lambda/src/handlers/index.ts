@@ -12,7 +12,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       return createHandler(event);
     case 'DELETE':
       return deleteHandler(event);
-      case 'PUT':
+    case 'PUT':
       return updateTransaction(event);
     default:
       return {

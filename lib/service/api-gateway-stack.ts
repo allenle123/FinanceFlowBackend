@@ -19,15 +19,11 @@ export class ApiGatewayStack extends Stack {
             description: 'API for Finance Flow application',
         });
 
-        // Create a resource for transactions
         const transactionsResource = this.api.root.addResource('api');
 
-        // Add methods for GET, POST, DELETE using the transactionHandler
         transactionsResource.addMethod('GET', new LambdaIntegration(props.transactionHandler));
         transactionsResource.addMethod('POST', new LambdaIntegration(props.transactionHandler));
         transactionsResource.addMethod('DELETE', new LambdaIntegration(props.transactionHandler));
-
-        // Add a PUT method for updates using the updateTransactionHandler
         transactionsResource.addMethod('PUT', new LambdaIntegration(props.transactionHandler));
     }
 }

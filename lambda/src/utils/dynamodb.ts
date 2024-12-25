@@ -53,34 +53,44 @@ export const updateTransaction = async (
   transactionId: string,
   updateFields: Partial<Omit<Transaction, 'userId' | 'transactionId'>>
 ): Promise<Transaction> => {
-  const updateExpression = Object.keys(updateFields)
-    .map((key, index) => `#field${index} = :value${index}`)
-    .join(', ');
-  const expressionAttributeNames = Object.keys(updateFields).reduce(
-    (acc, key, index) => ({
-      ...acc,
-      [`#field${index}`]: key,
-    }),
-    {}
-  );
-  const expressionAttributeValues = Object.keys(updateFields).reduce(
-    (acc, key, index) => ({
-      ...acc,
-      [`:value${index}`]: (updateFields as any)[key],
-    }),
-    {}
-  );
+  // Ensure there are fields to update
+  if (!Object.keys(updateFields).length) {
+    throw new Error('No fields provided to update.');
+  }
 
+  // Construct the UpdateExpression
+  const updateExpression = Object.keys(updateFields)
+    .map((key) => `${key} = :${key}`)
+    .join(', ');
+
+  // Prepare the ExpressionAttributeValues object
+  const expressionAttributeValues = Object.keys(updateFields).reduce((acc, key) => {
+    acc[`:${key}`] = updateFields[key as keyof typeof updateFields];
+    return acc;
+  }, {} as { [key: string]: any });
+
+  // Define the parameters for the DynamoDB update
   const params = {
     TableName: TABLE_NAME,
     Key: { userId, transactionId },
     UpdateExpression: `SET ${updateExpression}`,
-    ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
-    ReturnValues: 'ALL_NEW',
+    ReturnValues: 'ALL_NEW', // Return the updated item
   };
 
-  const result = await dynamodb.update(params).promise();
+  try {
+    const result = await dynamodb.update(params).promise();
 
-  return result.Attributes as Transaction;
+    if (!result.Attributes) {
+      throw new Error('Transaction not found or update failed.');
+    }
+
+    return result.Attributes as Transaction;
+  } catch (error) {
+    console.error('Error updating transaction in DynamoDB:', error);
+    throw new Error('Failed to update transaction');
+  }
 };
+
+
+
