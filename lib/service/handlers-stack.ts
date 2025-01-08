@@ -1,5 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { Function, Runtime, Code } from 'aws-cdk-lib/aws-lambda';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 
@@ -8,15 +9,15 @@ interface HandlersStackProps extends StackProps {
 }
 
 export class HandlersStack extends Stack {
-    public readonly TransactionHandler: Function;
+    public readonly TransactionHandler: NodejsFunction;
 
     constructor(scope: Construct, id: string, props: HandlersStackProps) {
         super(scope, id, props);
 
-        this.TransactionHandler = new Function(this, 'TransactionHandler', {
+        this.TransactionHandler = new NodejsFunction(this, 'TransactionHandler', {
             runtime: Runtime.NODEJS_18_X,
-            handler: 'dist/handlers/index.handler',
-            code: Code.fromAsset('lambda'),
+            entry: 'src/functions/transactions/index.ts',
+            handler: 'handler',
             environment: {
                 STAGE: 'dev',
                 TRANSACTIONS_TABLE: props.transactionsTable.tableName
