@@ -1,5 +1,5 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { RestApi, LambdaIntegration, MethodOptions, MockIntegration, Integration, PassthroughBehavior } from 'aws-cdk-lib/aws-apigateway';
+import { RestApi, LambdaIntegration, MockIntegration, Cors } from 'aws-cdk-lib/aws-apigateway';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
@@ -19,8 +19,8 @@ export class ApiGatewayStack extends Stack {
             description: 'API for Finance Flow application',
             defaultCorsPreflightOptions: {
                 allowOrigins: ['http://localhost:5173'], // Allow your frontend origin
-                allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
-                allowHeaders: ['Content-Type', 'Authorization', 'Clerk-Signature'], // Allowed headers
+                allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+                allowHeaders: ['Content-Type', 'Authorization'], // Allowed headers
                 allowCredentials: true,  // Allow credentials
             },
         });
@@ -38,5 +38,6 @@ export class ApiGatewayStack extends Stack {
         transactionsResource.addMethod('POST', transactionIntegration);
         transactionsResource.addMethod('PUT', transactionIntegration);
         transactionsResource.addMethod('DELETE', transactionIntegration);
+        
     }
 }

@@ -20,15 +20,25 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "outDir": "./build",
+    "outDir": "./dist",
     "rootDir": "."
   },
+  "include": [
+    "src/**/*",
+    "bin/**/*",
+    "lib/**/*",
+    "test/**/*",
+    "lambda/src/**/*"
+  ],
   "exclude": [
     "node_modules",
-    "build",
+    "dist",
     "cdk.out"
   ]
 }

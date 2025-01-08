@@ -1,15 +1,15 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { deleteTransaction } from '../utils/dynamodb';
+import { updateTransaction } from '../../utils/dynamodb';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    const userId = event.queryStringParameters?.userId;
-    const transactionId = event.queryStringParameters?.transactionId;
+    const { userId, transactionId, ...updateFields } = JSON.parse(event.body || '');
 
+    // Ensure `userId` and `transactionId` are provided
     if (!userId || !transactionId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'userId and transactionId are required' }),
+        body: JSON.stringify({ error: 'userId and transactionId are required.' }),
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:5174', // or '*'
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -19,11 +19,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       };
     }
 
-    await deleteTransaction(userId, transactionId);
+    const updatedTransaction = await updateTransaction(userId, transactionId, updateFields);
 
     return {
-      statusCode: 204,
-      body: '',
+      statusCode: 200,
+      body: JSON.stringify(updatedTransaction),
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:5174', // or '*'
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -34,7 +34,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to delete transaction' }),
+      body: JSON.stringify({ error: 'Failed to update transaction' }),
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:5174', // or '*'
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
