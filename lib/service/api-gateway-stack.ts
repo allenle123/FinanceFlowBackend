@@ -1,5 +1,10 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { RestApi, LambdaIntegration, MockIntegration, Cors } from 'aws-cdk-lib/aws-apigateway';
+import {
+    RestApi,
+    LambdaIntegration,
+    MockIntegration,
+    Cors,
+} from 'aws-cdk-lib/aws-apigateway';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
@@ -21,7 +26,7 @@ export class ApiGatewayStack extends Stack {
                 allowOrigins: ['http://localhost:5173'], // Allow your frontend origin
                 allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
                 allowHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-                allowCredentials: true,  // Allow credentials
+                allowCredentials: true, // Allow credentials
             },
         });
 
@@ -29,15 +34,17 @@ export class ApiGatewayStack extends Stack {
         const transactionsResource = this.api.root.addResource('api');
 
         // Use Lambda Integration with Proxy Integration
-        const transactionIntegration = new LambdaIntegration(props.transactionHandler, {
-            proxy: true, // Enable Lambda Proxy Integration
-        });
+        const transactionIntegration = new LambdaIntegration(
+            props.transactionHandler,
+            {
+                proxy: true, // Enable Lambda Proxy Integration
+            }
+        );
 
         // Add the methods for GET, POST, PUT, DELETE
         transactionsResource.addMethod('GET', transactionIntegration);
         transactionsResource.addMethod('POST', transactionIntegration);
         transactionsResource.addMethod('PUT', transactionIntegration);
         transactionsResource.addMethod('DELETE', transactionIntegration);
-        
     }
 }

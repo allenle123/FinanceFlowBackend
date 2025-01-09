@@ -1,34 +1,36 @@
 {
-  "name": "finance_flow_backend",
-  "version": "0.1.0",
-  "bin": {
-    "finance_flow_backend": "bin/finance_flow_backend.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "clean": "rimraf dist",
-    "prebuild": "npm run clean",
-    "test": "jest",
-    "cdk": "cdk"
-  },
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.134",
-    "@types/jest": "^29.5.14",
-    "@types/node": "22.7.9",
-    "@types/uuid": "^9.0.8",
-    "aws-cdk": "2.173.1",
-    "esbuild": "^0.24.2",
-    "jest": "^29.7.0",
-    "rimraf": "^5.0.5",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "2.173.1",
-    "aws-sdk": "^2.1555.0",
-    "constructs": "^10.0.0",
-    "uuid": "^9.0.1"
-  }
+    "name": "finance_flow_backend",
+    "version": "0.1.0",
+    "bin": {
+        "finance_flow_backend": "bin/finance_flow_backend.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "clean": "rimraf dist",
+        "prebuild": "npm run clean",
+        "test": "jest",
+        "cdk": "cdk",
+        "prettier": "prettier --write ."
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.134",
+        "@types/jest": "^29.5.14",
+        "@types/node": "22.7.9",
+        "@types/uuid": "^9.0.8",
+        "aws-cdk": "2.173.1",
+        "esbuild": "^0.24.2",
+        "jest": "^29.7.0",
+        "prettier": "^3.4.2",
+        "rimraf": "^5.0.5",
+        "ts-jest": "^29.2.5",
+        "ts-node": "^10.9.2",
+        "typescript": "~5.6.3"
+    },
+    "dependencies": {
+        "aws-cdk-lib": "2.173.1",
+        "aws-sdk": "^2.1555.0",
+        "constructs": "^10.0.0",
+        "uuid": "^9.0.1"
+    }
 }
