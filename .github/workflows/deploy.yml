@@ -23,14 +23,16 @@ jobs:
           aws-region: us-east-1
           
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          cd lambda && npm install
 
       - name: Build
         run: npm run build
 
       - name: Zip Lambda function
         run: |
-          cd dist
+          cd lambda
           zip -r ../lambda-package.zip . -x "*.git*" -x "node_modules/aws-sdk/*"
 
       - name: Deploy Lambda function to AWS
