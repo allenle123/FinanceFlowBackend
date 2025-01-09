@@ -22,17 +22,18 @@ export const createTransaction = async (transaction: TransactionInput): Promise<
 };
 
 export const getTransactionsByUser = async (userId: string): Promise<Transaction[]> => {
-  const result = await dynamodb
-    .query({
-      TableName: TABLE_NAME,
-      KeyConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: {
-        ':userId': userId,
-      },
-    })
-    .promise();
+    console.log(`Querying GET transaction for userId of: ${userId}`)
+    const result = await dynamodb
+        .query({
+            TableName: TABLE_NAME,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': userId,
+            },
+        })
+        .promise();
 
-  return result.Items as Transaction[];
+    return result.Items as Transaction[];
 };
 
 export const deleteTransaction = async (userId: string, transactionId: string): Promise<void> => {
