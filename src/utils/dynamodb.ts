@@ -27,6 +27,7 @@ export const getTransactionsByUser = async (
     userId: string,
 ): Promise<Transaction[]> => {
     console.log(`Querying GET transaction for userId of: ${userId}`);
+
     const result = await dynamodb
         .query({
             TableName: TABLE_NAME,
@@ -44,6 +45,8 @@ export const deleteTransaction = async (
     userId: string,
     transactionId: string,
 ): Promise<void> => {
+    console.log(`Querying DELETE transaction for userId of: ${userId}`);
+
     await dynamodb
         .delete({
             TableName: TABLE_NAME,
