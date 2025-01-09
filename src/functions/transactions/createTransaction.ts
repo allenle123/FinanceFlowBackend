@@ -3,7 +3,7 @@ import { createTransaction } from '../../utils/dynamodb';
 import { TransactionInput } from '../../types/transaction';
 
 export const handler = async (
-    event: APIGatewayProxyEvent
+    event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
     try {
         const transaction: TransactionInput = JSON.parse(event.body || '');

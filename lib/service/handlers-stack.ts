@@ -25,7 +25,7 @@ export class HandlersStack extends Stack {
                     STAGE: 'dev',
                     TRANSACTIONS_TABLE: props.transactionsTable.tableName,
                 },
-            }
+            },
         );
 
         props.transactionsTable.grantReadWriteData(this.TransactionHandler);

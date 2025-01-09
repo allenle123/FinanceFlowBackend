@@ -38,7 +38,7 @@ export class ApiGatewayStack extends Stack {
             props.transactionHandler,
             {
                 proxy: true, // Enable Lambda Proxy Integration
-            }
+            },
         );
 
         // Add the methods for GET, POST, PUT, DELETE

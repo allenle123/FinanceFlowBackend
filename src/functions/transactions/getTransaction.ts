@@ -10,7 +10,7 @@ const corsHeaders = {
 };
 
 export const handler = async (
-    event: APIGatewayProxyEvent
+    event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
     if (event.httpMethod === 'OPTIONS') {
         return {

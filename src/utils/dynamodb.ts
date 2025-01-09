@@ -6,7 +6,7 @@ const dynamodb = new DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TRANSACTIONS_TABLE!;
 
 export const createTransaction = async (
-    transaction: TransactionInput
+    transaction: TransactionInput,
 ): Promise<Transaction> => {
     const newTransaction: Transaction = {
         ...transaction,
@@ -24,7 +24,7 @@ export const createTransaction = async (
 };
 
 export const getTransactionsByUser = async (
-    userId: string
+    userId: string,
 ): Promise<Transaction[]> => {
     console.log(`Querying GET transaction for userId of: ${userId}`);
     const result = await dynamodb
@@ -42,7 +42,7 @@ export const getTransactionsByUser = async (
 
 export const deleteTransaction = async (
     userId: string,
-    transactionId: string
+    transactionId: string,
 ): Promise<void> => {
     await dynamodb
         .delete({
@@ -58,7 +58,7 @@ export const deleteTransaction = async (
 export const updateTransaction = async (
     userId: string,
     transactionId: string,
-    updateFields: Partial<Omit<Transaction, 'userId' | 'transactionId'>>
+    updateFields: Partial<Omit<Transaction, 'userId' | 'transactionId'>>,
 ): Promise<Transaction> => {
     // Ensure there are fields to update
     if (!Object.keys(updateFields).length) {
@@ -76,7 +76,7 @@ export const updateTransaction = async (
             acc[`:${key}`] = updateFields[key as keyof typeof updateFields];
             return acc;
         },
-        {} as { [key: string]: any }
+        {} as { [key: string]: any },
     );
 
     // Define the parameters for the DynamoDB update

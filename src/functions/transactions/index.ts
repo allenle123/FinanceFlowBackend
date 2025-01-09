@@ -5,7 +5,7 @@ import { handler as deleteHandler } from './deleteTransaction';
 import { handler as updateTransaction } from './updateTransaction';
 
 export const handler = async (
-    event: APIGatewayProxyEvent
+    event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
     switch (event.httpMethod) {
         case 'GET':

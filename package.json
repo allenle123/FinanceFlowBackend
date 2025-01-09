@@ -8,7 +8,7 @@
         "build": "tsc",
         "watch": "tsc -w",
         "clean": "rimraf dist",
-        "prebuild": "npm run clean",
+        "prebuild": "npm run clean && npm run prettier",
         "test": "jest",
         "cdk": "cdk",
         "prettier": "prettier --write ."

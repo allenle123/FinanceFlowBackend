@@ -2,11 +2,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { updateTransaction } from '../../utils/dynamodb';
 
 export const handler = async (
-    event: APIGatewayProxyEvent
+    event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
     try {
         const { userId, transactionId, ...updateFields } = JSON.parse(
-            event.body || ''
+            event.body || '',
         );
 
         // Ensure `userId` and `transactionId` are provided
@@ -30,7 +30,7 @@ export const handler = async (
         const updatedTransaction = await updateTransaction(
             userId,
             transactionId,
-            updateFields
+            updateFields,
         );
 
         return {
