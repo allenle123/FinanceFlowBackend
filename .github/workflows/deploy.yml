@@ -1,45 +1,47 @@
 name: Deploy to AWS
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          
-      - name: Install dependencies
-        run: |
-          npm ci
-          cd lambda && npm install
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Build
-        run: npm run build
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18'
 
-      - name: Zip Lambda function
-        run: |
-          cd lambda
-          zip -r ../lambda-package.zip . -x "*.git*" -x "node_modules/aws-sdk/*"
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1
 
-      - name: Deploy Lambda function to AWS
-        run: |
-          aws lambda update-function-code \
-            --function-name FinanceFlowBackendStackHa-TransactionHandler511285-prarOvUhth4c \
-            --zip-file fileb://lambda-package.zip
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Deploy infrastructure with CDK
-        run: npx cdk deploy --all --require-approval never
+            - name: Build
+              run: npm run build
+
+            - name: Package Lambda function
+              run: |
+                  mkdir -p lambda-package
+                  cp dist/src/functions/transactions/*.js lambda-package/
+                  cp dist/src/utils/*.js lambda-package/
+                  cp -r dist/src/types lambda-package/
+                  cd lambda-package
+                  zip -r ../lambda-package.zip .
+
+            - name: Deploy Lambda function to AWS
+              run: |
+                  aws lambda update-function-code \
+                    --function-name FinanceFlowBackendStackHa-TransactionHandler511285-prarOvUhth4c \
+                    --zip-file fileb://lambda-package.zip
+
+            - name: Deploy infrastructure with CDK
+              run: npx cdk deploy --all --require-approval never

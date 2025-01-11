@@ -1,5 +1,10 @@
 import { Stack, StackProps, RemovalPolicy } from 'aws-cdk-lib';
-import { Table, AttributeType, BillingMode, ProjectionType } from 'aws-cdk-lib/aws-dynamodb';
+import {
+    Table,
+    AttributeType,
+    BillingMode,
+    ProjectionType,
+} from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 
 export class StorageStack extends Stack {
@@ -20,7 +25,7 @@ export class StorageStack extends Stack {
             indexName: 'userDate-index',
             partitionKey: { name: 'userId', type: AttributeType.STRING },
             sortKey: { name: 'date', type: AttributeType.STRING },
-            projectionType: ProjectionType.ALL
+            projectionType: ProjectionType.ALL,
         });
     }
-} 
+}

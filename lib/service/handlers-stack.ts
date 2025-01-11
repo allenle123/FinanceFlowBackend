@@ -14,16 +14,20 @@ export class HandlersStack extends Stack {
     constructor(scope: Construct, id: string, props: HandlersStackProps) {
         super(scope, id, props);
 
-        this.TransactionHandler = new NodejsFunction(this, 'TransactionHandler', {
-            runtime: Runtime.NODEJS_18_X,
-            entry: 'src/functions/transactions/index.ts',
-            handler: 'handler',
-            environment: {
-                STAGE: 'dev',
-                TRANSACTIONS_TABLE: props.transactionsTable.tableName
-            }
-        });
+        this.TransactionHandler = new NodejsFunction(
+            this,
+            'TransactionHandler',
+            {
+                runtime: Runtime.NODEJS_18_X,
+                entry: 'src/functions/transactions/index.ts',
+                handler: 'handler',
+                environment: {
+                    STAGE: 'dev',
+                    TRANSACTIONS_TABLE: props.transactionsTable.tableName,
+                },
+            },
+        );
 
         props.transactionsTable.grantReadWriteData(this.TransactionHandler);
     }
-} 
+}
