@@ -8,6 +8,7 @@ const TABLE_NAME = process.env.TRANSACTIONS_TABLE!;
 export const createTransaction = async (
     transaction: TransactionInput,
 ): Promise<Transaction> => {
+    console.log('Creating new transaction with fields: ', transaction, '');
     const newTransaction: Transaction = {
         ...transaction,
         transactionId: uuidv4(),
