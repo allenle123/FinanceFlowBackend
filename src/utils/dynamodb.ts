@@ -63,30 +63,33 @@ export const updateTransaction = async (
     transactionId: string,
     updateFields: Partial<Omit<Transaction, 'userId' | 'transactionId'>>,
 ): Promise<Transaction> => {
+    console.log(
+        `Querying UPDATE transaction for userId of: ${userId} and transactionId of: ${transactionId}`,
+    );
+
     // Ensure there are fields to update
     if (!Object.keys(updateFields).length) {
         throw new Error('No fields provided to update.');
     }
 
-    // Construct the UpdateExpression
-    const updateExpression = Object.keys(updateFields)
-        .map((key) => `${key} = :${key}`)
-        .join(', ');
+    const updateExpressionParts: string[] = [];
+    const expressionAttributeNames: { [key: string]: string } = {};
+    const expressionAttributeValues: { [key: string]: any } = {};
 
-    // Prepare the ExpressionAttributeValues object
-    const expressionAttributeValues = Object.keys(updateFields).reduce(
-        (acc, key) => {
-            acc[`:${key}`] = updateFields[key as keyof typeof updateFields];
-            return acc;
-        },
-        {} as { [key: string]: any },
-    );
+    Object.keys(updateFields).forEach((key) => {
+        const attributeKey = `#${key}`;
+        const valueKey = `:${key}`;
+        updateExpressionParts.push(`${attributeKey} = ${valueKey}`);
+        expressionAttributeNames[attributeKey] = key; // Map reserved keywords
+        expressionAttributeValues[valueKey] =
+            updateFields[key as keyof typeof updateFields];
+    });
 
-    // Define the parameters for the DynamoDB update
     const params = {
         TableName: TABLE_NAME,
         Key: { userId, transactionId },
-        UpdateExpression: `SET ${updateExpression}`,
+        UpdateExpression: `SET ${updateExpressionParts.join(', ')}`,
+        ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: expressionAttributeValues,
         ReturnValues: 'ALL_NEW', // Return the updated item
     };
